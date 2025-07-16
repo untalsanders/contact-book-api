@@ -1,6 +1,11 @@
 spring:
   devtools:
     add-properties: false
+  datasource:
+    driver-class-name: ${database.db-driver-class-name:org.postgresql.Driver}
+    url: jdbc:${database.db-driver:postgresql}://${database.db-host:localhost}:${database.db-port:5432}/${database.db-name:contacts}
+    username: ${database.db-user:postgres}
+    password: ${database.db-pass:12345}
   jpa:
     show-sql: true
     hibernate:
@@ -16,8 +21,8 @@ server:
     include-exception: false
 
 database:
-  db-driver: postgresql
-  db-driver-class-name: org.postgresql.Driver
+  db-driver: ${DB_DRIVER}
+  db-driver-class-name: ${DB_DRIVER_CLASSNAME}
   db-host: ${DB_HOST}
   db-port: ${DB_PORT}
   db-name: ${DB_NAME}
