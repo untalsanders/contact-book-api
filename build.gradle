@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'checkstyle'
     id 'jacoco'
-    id 'org.springframework.boot' version '3.5.0'
+    id 'org.springframework.boot' version '3.5.3'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -12,7 +12,7 @@ group = 'com.untalsanders.contacts.api'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
 }
 
@@ -86,7 +86,7 @@ jar {
 }
 
 javadoc {
-    include 'io/github/untalsanders/contacts/domain/**'
+    include 'com/untalsanders/contacts/domain/**'
 }
 
 checkstyle {
