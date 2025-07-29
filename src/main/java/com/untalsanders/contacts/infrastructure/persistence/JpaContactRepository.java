@@ -8,6 +8,7 @@ import com.untalsanders.contacts.infrastructure.persistence.entity.ContactEntity
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,7 @@ public class JpaContactRepository implements ContactRepository {
     }
 
     @Override
+    @Transactional
     public void save(Contact contact) {
         ContactEntity contactEntity = contactMapper.domainToEntity(contact);
         if (contactEntity.getId() == null) {
