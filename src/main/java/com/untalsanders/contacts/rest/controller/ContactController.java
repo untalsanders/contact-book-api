@@ -30,8 +30,9 @@ public class ContactController {
     private final ContactMapper contactMapper;
 
     @GetMapping
-    public ResponseEntity<List<Contact>> getAllContacts() {
-        return new ResponseEntity<>(retrieveContactUseCase.getContacts(), HttpStatus.OK);
+    public ResponseEntity<List<ContactDto>> getAllContacts() {
+        List<Contact> contactList = retrieveContactUseCase.getContacts();
+        return new ResponseEntity<>(contactMapper.toContactDtoCollection(contactList), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

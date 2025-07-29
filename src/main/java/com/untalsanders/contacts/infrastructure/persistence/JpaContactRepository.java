@@ -50,7 +50,7 @@ public class JpaContactRepository implements ContactRepository {
     @Override
     public void save(Contact contact) {
         ContactEntity contactEntity = contactMapper.domainToEntity(contact);
-        if (contact.getId() == null) {
+        if (contactEntity.getId() == null) {
             this.em.persist(contactEntity);
             LOG.info("Contact saved");
         } else {
