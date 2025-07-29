@@ -20,12 +20,12 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
-public class JpaContactRepository implements ContactRepository {
+public class JpaContactRepositoryImpl implements ContactRepository {
 
     @PersistenceContext
     private EntityManager em;
 
-    private static final Logger LOG = LoggerFactory.getLogger(JpaContactRepository.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JpaContactRepositoryImpl.class);
     private final ContactMapper contactMapper;
 
     @Override
