@@ -12,11 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "contacts")
-public class ContactEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class ContactEntity extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String firstname;
 
@@ -25,16 +21,10 @@ public class ContactEntity {
     @Column(nullable = false, unique = true)
     private String phone;
 
-    public ContactEntity(Long id, String firstname, String phone) {
-        this.id = id;
-        this.firstname = firstname;
-        this.phone = phone;
-    }
-
     @Override
     public String toString() {
-        return "ContactEntity{" +
-            "id=" + id +
+        return "Contact{" +
+            "id=" + this.getId() +
             ", firstname='" + firstname + '\'' +
             ", lastname='" + lastname + '\'' +
             ", phone='" + phone + '\'' +
