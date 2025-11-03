@@ -1,5 +1,10 @@
-@startuml
+@startuml "Contacts API - Use Cases Diagram C4Model"
+!include styles.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
 left to right direction
+
+title Use Cases Diagram MS-Contacts
 
 skinparam packageStyle rectangle
 
@@ -18,4 +23,7 @@ User --> (US2)
 User --> (US3)
 User --> (US4)
 User --> (US5)
+
+caption \nFigure 3: [Use Cases] MS-Contacts
+footer diagram created with PlantUML v. %version() y C4-PlantUML v. C4Version()
 @enduml

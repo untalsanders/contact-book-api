@@ -22,7 +22,7 @@ title Container diagram for Contact Management System
 SHOW_PERSON_OUTLINE()
 HIDE_STEREOTYPE()
 
-Person(customer, Customer, "A person who need to manage contact lists.", $sprite="person", $type="Person")
+Person(customer, User, "A person who need to manage contact lists.", $sprite="person", $type="Person")
 
 System_Boundary(c1, <font size="16">Contact Management System</font>) {
     Container(spa, "Single-Page Application", "Container: React and React Router", "Provides all the Contact Management System functionality to customer via their web browser.", $sprite="react")
