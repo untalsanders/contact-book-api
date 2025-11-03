@@ -1,0 +1,10 @@
+INSERT INTO contacts (id, firstname, lastname, phone) VALUES (1, 'Nombre 1', 'Apellido 1', '1234567890');
+INSERT INTO contacts (id, firstname, lastname, phone) VALUES (2, 'Nombre 2', 'Apellido 2', '9876543210');
+INSERT INTO contacts (id, firstname, lastname, phone) VALUES (3, 'Nombre 3', 'Apellido 3', '5555555555');
+INSERT INTO contacts (id, firstname, lastname, phone) VALUES (4, 'Nombre 4', 'Apellido 4', '1111111111');
+INSERT INTO contacts (id, firstname, lastname, phone) VALUES (5, 'Nombre 5', 'Apellido 5', '9999999999');
+INSERT INTO contacts (id, firstname, lastname, phone) VALUES (6, 'Nombre 6', 'Apellido 6', '7777777777');
+INSERT INTO contacts (id, firstname, lastname, phone) VALUES (7, 'Nombre 7', 'Apellido 7', '4444444444');
+INSERT INTO contacts (id, firstname, lastname, phone) VALUES (8, 'Nombre 8', 'Apellido 8', '2222222222');
+INSERT INTO contacts (id, firstname, lastname, phone) VALUES (9, 'Nombre 9', 'Apellido 9', '8888888888');
+INSERT INTO contacts (id, firstname, lastname, phone) VALUES (10, 'Nombre 10', 'Apellido 10', '6666666666');

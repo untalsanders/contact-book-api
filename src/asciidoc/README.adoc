@@ -43,4 +43,4 @@ Disponible en el repositorio:
 
 La siguiente imagen es una representación con UML del contexto general de la aplicación. Está basado en los diagramas de C4Model.
 
-image::./Contacts_API___Context_Diagram_C4Model-Diagrama_de_Contexto_MS_Anexos.svg[]
+image::./Contacts_API___Context_Diagram_C4Model-Context_Diagram_MS_Contacts.svg[]

@@ -10,20 +10,20 @@ HIDE_STEREOTYPE()
 AddElementTag("softwareSystem", $fontColor=$ELEMENT_FONT_COLOR, $bgColor="#1168bd", $legendText="software system")
 AddRelTag("async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DashedLine())
 
-title Diagrama de Contexto MS-Contactos
+title Context Diagram MS-Contacts
 
 SHOW_PERSON_OUTLINE()
 
-Person(customer, Usuario Final, "El usuario que usa la aplicación de contactos", $sprite="person", $type="Person")
-System(contacts_system, "MS-Contactos\n<size:10>[Software System]</size>", "Permite la gestión de una lista de contactos", $tags="softwareSystem")
-System_Ext(mail, "E-mail System", "Software interno de intercambio de correos electrónicos.")
+Person(customer, User, "The user who uses the contacts application.", $sprite="person", $type="Person")
+System(contacts_system, "MS-Contacts\n<size:10>[Software System]</size>", "It allows the management of a contact list.", $tags="softwareSystem")
+System_Ext(mail, "E-mail System", "Internal E-mail exchange software.")
 
-Rel(customer, contacts_system, "Crea, edita o elimina contactos.")
-Rel_Back(customer, mail, "Envía e-mails a", $tags="async")
-Rel_Neighbor(contacts_system, mail, "Envía e-mails", "SMTP", $tags="async")
+Rel(customer, contacts_system, "Create, edit or delete contacts.")
+Rel_Back(customer, mail, "Send e-mails to", $tags="async")
+Rel_Neighbor(contacts_system, mail, "Send e-mails", "SMTP", $tags="async")
 
 SHOW_FLOATING_LEGEND()
 
-caption \nFigure 1: [Contexto del Sistema] MS-Contactos
-footer diagrama creado con PlantUML v. %version() y C4-PlantUML v. C4Version()
+caption \nFigure 1: [Context of System] MS-Contacts
+footer diagram created with PlantUML v. %version() y C4-PlantUML v. C4Version()
 @enduml

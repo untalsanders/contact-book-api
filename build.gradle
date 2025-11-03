@@ -1,19 +1,24 @@
+buildscript {
+    ext {
+        springBootVer = '3.5.3'
+    }
+}
+
 plugins {
     id 'java'
     id 'checkstyle'
     id 'jacoco'
-    id 'org.springframework.boot' version '3.5.0'
-    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.springframework.boot' version "${springBootVer}"
 }
 
-apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
 
 group = 'com.untalsanders.contacts.api'
 version = '0.0.1-SNAPSHOT'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
@@ -21,37 +26,42 @@ repositories {
 }
 
 ext {
-    assertJVersion = '3.25.1'
     hibernateValidatorVersion = '8.0.0.Final'
-    hsqldbVersion = '2.7.1'
-    h2Version = '2.3.230'
-    junitJupiterVersion = '5.10.2'
-    lombokVersion = '1.18.34'
-    mapStructVersion = '1.6.2'
-    postgresqlVersion = '42.7.3'
 }
 
 dependencies {
-    // Prod
-    implementation 'org.apache.commons:commons-lang3'
-    implementation "org.mapstruct:mapstruct:${mapStructVersion}"
-    implementation "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
-    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0"
+    // Production ------------------------------------------------------------------//
+
+    //-- Spring Boot Dependencies all inherit from the spring-boot-starter-parent --//
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    runtimeOnly "org.hsqldb:hsqldb:${hsqldbVersion}"
-    runtimeOnly "com.h2database:h2:${h2Version}"
-    runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
-    compileOnly "org.projectlombok:lombok:${lombokVersion}"
-    // Dev
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    implementation 'org.apache.commons:commons-lang3'
+    implementation "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
+    implementation libs.springdoc.openapi.starter.webmvc.ui
+    implementation libs.mapstruct
+
+    // Runtime ---------------------------------------------------------------------//
+
+    //-- Data stores and supporting libs --//
+    runtimeOnly libs.h2
+    runtimeOnly libs.hsqldb
+    runtimeOnly libs.postgres
+
+    // Compile ---------------------------------------------------------------------//
+    compileOnly libs.lombok
+
     // Annotation Processors
-    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
-    // Test
+    annotationProcessor libs.lombok
+    annotationProcessor libs.mapstruct.processor
+
+    // Test ------------------------------------------------------------------------//
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     checkstyle "com.puppycrawl.tools:checkstyle:${checkstyle.toolVersion}"
+
+    // Development -----------------------------------------------------------------//
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 test {
@@ -86,7 +96,7 @@ jar {
 }
 
 javadoc {
-    include 'io/github/untalsanders/contacts/domain/**'
+    include 'com/untalsanders/contacts/domain/**'
 }
 
 checkstyle {

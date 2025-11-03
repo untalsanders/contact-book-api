@@ -1,0 +1,16 @@
+[versions]
+h2 = "2.3.232"
+hsqldb = "2.7.1"
+lombok = "1.18.38"
+mapstruct = "1.6.3"
+postgres = "42.7.7"
+springdoc-openapi-starter-webmvc-ui = "2.8.9"
+
+[libraries]
+h2 = { module = "com.h2database:h2", version.ref = "h2" }
+hsqldb = { module = "org.hsqldb:hsqldb", version.ref = "hsqldb" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
+postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
+springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi-starter-webmvc-ui" }

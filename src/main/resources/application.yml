@@ -1,4 +1,5 @@
 server:
+  port: ${PORT:8080}
   servlet:
     context-path: /api
   compression:
@@ -8,12 +9,7 @@ server:
 
 spring:
   profiles:
-    active: prod
-  datasource:
-    driver-class-name: ${database.db-driver-class-name}
-    url: jdbc:${database.db-driver}://${database.db-host}:${database.db-port}/${database.db-name}
-    username: ${database.db-user}
-    password: ${database.db-pass}
+    active: dev
 
 springdoc:
   api-docs:
