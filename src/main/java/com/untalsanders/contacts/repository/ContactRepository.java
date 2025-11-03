@@ -41,9 +41,10 @@ public interface ContactRepository {
      *
      * @param id      the id for search and update
      * @param contact the <code>Contact</code> to update
+     * @return the updated <code>Contact</code>
      * @throws ContactNotFoundException in case the <code>Contact</code> with given id not exists.
      */
-    void update(Long id, Contact contact);
+    Contact update(Long id, Contact contact);
 
     /**
      * Delete a <code>Contact</code> from the data store.

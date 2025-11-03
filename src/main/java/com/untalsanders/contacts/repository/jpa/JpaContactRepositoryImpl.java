@@ -1,6 +1,7 @@
 package com.untalsanders.contacts.repository.jpa;
 
 import com.untalsanders.contacts.entity.ContactEntity;
+import com.untalsanders.contacts.exception.ContactNotFoundException;
 import com.untalsanders.contacts.mapper.ContactMapper;
 import com.untalsanders.contacts.model.Contact;
 import com.untalsanders.contacts.repository.ContactRepository;
@@ -60,8 +61,17 @@ public class JpaContactRepositoryImpl implements ContactRepository {
     }
 
     @Override
-    public void update(Long id, Contact contact) {
-        // TODO
+    @Transactional
+    public Contact update(Long id, Contact contact) {
+        Optional<Contact> existingContact = findById(id);
+        if (existingContact.isEmpty()) {
+            throw new ContactNotFoundException(String.format("Contact with id %s not found", id));
+        }
+        ContactEntity contactEntity = contactMapper.domainToEntity(contact);
+        contactEntity.setId(id); // Ensure the ID is set
+        ContactEntity updatedEntity = em.merge(contactEntity);
+        LOG.info("Contact updated: {}", updatedEntity.getId());
+        return contactMapper.entityToDomain(updatedEntity);
     }
 
     @Override
