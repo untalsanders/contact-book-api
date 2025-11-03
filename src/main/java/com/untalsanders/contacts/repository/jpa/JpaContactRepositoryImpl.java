@@ -75,16 +75,31 @@ public class JpaContactRepositoryImpl implements ContactRepository {
     }
 
     @Override
+    @Transactional
     public void delete(Contact contact) {
-        LOG.info("Deleting contact: {}", contact.getId());
+        ContactEntity contactEntity = contactMapper.domainToEntity(contact);
+        if (contactEntity.getId() != null) {
+            ContactEntity managedEntity = em.find(ContactEntity.class, contactEntity.getId());
+            if (managedEntity != null) {
+                em.remove(managedEntity);
+                LOG.info("Contact deleted: {}", contact.getId());
+            } else {
+                LOG.warn("Contact not found for deletion: {}", contact.getId());
+            }
+        } else {
+            LOG.warn("Contact ID is null, cannot delete");
+        }
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
-        Optional<Contact> contact = findById(id);
-        contact.ifPresent(value -> {
-            /*contactCrudRepository.deleteById(value.getId());*/
-            LOG.info("Deleted Contact with ID: {}", contact);
-        });
+        ContactEntity contactEntity = em.find(ContactEntity.class, id);
+        if (contactEntity != null) {
+            em.remove(contactEntity);
+            LOG.info("Deleted Contact with ID: {}", id);
+        } else {
+            LOG.warn("Contact not found for deletion with ID: {}", id);
+        }
     }
 }
