@@ -20,8 +20,7 @@ public class Contact {
     private String lastname;
     private String phone;
 
-    public Contact(Long id, String firstname, String phone) {
-        this.id = id;
+    public Contact(String firstname, String phone) {
         this.firstname = firstname;
         this.phone = phone;
     }
