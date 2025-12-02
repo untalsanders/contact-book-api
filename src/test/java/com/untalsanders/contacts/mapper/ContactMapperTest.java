@@ -18,7 +18,7 @@ class ContactMapperTest {
         Contact contact = new Contact(1L, name, "1123456789");
         ContactEntity contactEntity = ContactMapper.INSTANCE.domainToEntity(contact);
         assertThat(contactEntity).isNotNull();
-        assertThat(contactEntity.getFirstname()).isEqualTo(contact.getName().getFirst());
-        assertThat(contactEntity.getLastname()).isEqualTo(contact.getName().getLast());
+        assertThat(contactEntity.getFirstname()).isEqualTo(contact.getName().first());
+        assertThat(contactEntity.getLastname()).isEqualTo(contact.getName().last());
     }
 }
