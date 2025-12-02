@@ -2,6 +2,7 @@ package com.untalsanders.contacts.mapper;
 
 import com.untalsanders.contacts.entity.ContactEntity;
 import com.untalsanders.contacts.model.Contact;
+import com.untalsanders.contacts.model.Name;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.Mapper;
@@ -13,10 +14,11 @@ class ContactMapperTest {
     @Test
     @DisplayName("Should map to contact entity")
     void should_map_to_contact_entity() {
-        Contact contact = new Contact(1L, "Olfre", "1134228486");
+        Name name = new Name("John", "Doe");
+        Contact contact = new Contact(1L, name, "1123456789");
         ContactEntity contactEntity = ContactMapper.INSTANCE.domainToEntity(contact);
         assertThat(contactEntity).isNotNull();
-        assertThat(contactEntity.getFirstname()).isEqualTo(contact.getFirstname());
-        assertThat(contactEntity.getLastname()).isEqualTo(contact.getLastname());
+        assertThat(contactEntity.getFirstname()).isEqualTo(contact.getName().getFirst());
+        assertThat(contactEntity.getLastname()).isEqualTo(contact.getName().getLast());
     }
 }

@@ -16,12 +16,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Contact {
     private Long id;
-    private String firstname;
-    private String lastname;
+    private Name name;
     private String phone;
 
-    public Contact(String firstname, String phone) {
-        this.firstname = firstname;
+    public Contact(Name name, String phone) {
+        this.name = name;
         this.phone = phone;
     }
 
@@ -29,8 +28,7 @@ public class Contact {
     public String toString() {
         return "Contact{" +
             "id=" + id +
-            ", firstname='" + firstname + '\'' +
-            ", lastname='" + lastname + '\'' +
+            ", name=" + name +
             ", phone='" + phone + '\'' +
             '}';
     }
