@@ -48,12 +48,12 @@ public class ContactRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Optional<Contact>> updateContact(@PathVariable("id") Long id, @RequestBody Contact contact) {
+    public ResponseEntity<Optional<Contact>> updateContact(@PathVariable Long id, @RequestBody Contact contact) {
         return new ResponseEntity<>(updateContactUseCase.updateContact(id, contact), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteContactById(@PathVariable("id") Long id) {
+    public ResponseEntity<Map<String, Boolean>> deleteContactById(@PathVariable Long id) {
         deleteContactService.deleteContact(id);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
