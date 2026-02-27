@@ -3,7 +3,7 @@ spring:
     add-properties: false
   datasource:
     driver-class-name: ${database.db-driver-class-name:org.postgresql.Driver}
-    url: jdbc:${database.db-driver:postgresql}://${database.db-host:localhost}:${database.db-port:5432}/${database.db-name:contacts}
+    url: jdbc:${database.db-driver:postgresql}://${database.db-host:localhost}:${database.db-port:5432}/${database.db-name:contactbook}
     username: ${database.db-user:postgres}
     password: ${database.db-pass:12345}
   jpa:
