@@ -10,6 +10,9 @@ server:
 spring:
   profiles:
     active: dev
+  output:
+    ansi:
+      enabled: always
 
 springdoc:
   api-docs:
