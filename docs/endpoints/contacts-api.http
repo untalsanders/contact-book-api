@@ -7,7 +7,7 @@
 # group: Contacts
 # @name List Contacts
 GET {{BASE_URL}}/contacts
-Authorization: Basic {{user}} {{password}}
+# Authorization: Basic {{user}} {{password}}
 
 > {%
     client.test("GET all contacts returns 200", function () {
@@ -53,8 +53,8 @@ PUT {{BASE_URL}}/contacts/{{id}}
 Content-Type: application/json
 
 {
-    "id": {{id}},
-    "firstname": "Jackelin",
+    "firstName": "Jackelin",
+    "lastName": "Cadavid",
     "phone": "0541158643072"
 }
 
