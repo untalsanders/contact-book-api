@@ -15,12 +15,14 @@ public interface ContactMapper {
 
     ContactMapper INSTANCE = Mappers.getMapper(ContactMapper.class);
 
-    @Mapping(source = "firstname", target = "name.first")
-    @Mapping(source = "lastname", target = "name.last")
+    @Mapping(source = "firstName", target = "name.first")
+    @Mapping(source = "lastName", target = "name.last")
+    @Mapping(source = "phoneNumber", target = "phone")
     Contact toContact(ContactDto contactDto);
 
-    @Mapping(source = "name.first", target = "firstname")
-    @Mapping(source = "name.last", target = "lastname")
+    @Mapping(source = "name.first", target = "firstName")
+    @Mapping(source = "name.last", target = "lastName")
+    @Mapping(source = "phone", target = "phoneNumber")
     ContactDto toContactDto(Contact contact);
 
     List<ContactDto> toContactDtoCollection(List<Contact> contactList);

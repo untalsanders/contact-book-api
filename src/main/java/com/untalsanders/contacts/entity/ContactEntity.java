@@ -1,10 +1,9 @@
 package com.untalsanders.contacts.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.*;
 
 @Setter
 @Getter
@@ -12,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "contacts")
+@ToString
 public class ContactEntity extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String firstname;
@@ -20,14 +20,4 @@ public class ContactEntity extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String phone;
-
-    @Override
-    public String toString() {
-        return "Contact{" +
-            "id=" + this.getId() +
-            ", firstname='" + firstname + '\'' +
-            ", lastname='" + lastname + '\'' +
-            ", phone='" + phone + '\'' +
-            '}';
-    }
 }

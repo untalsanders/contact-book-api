@@ -7,10 +7,13 @@ import lombok.Data;
 public class ContactDto {
     @NotNull
     private Long id;
+
     @NotNull
-    private String firstname;
+    private String firstName;
+
     @NotNull
-    private String lastname;
+    private String lastName;
+
     @NotNull
-    private String phone;
+    private String phoneNumber;
 }
