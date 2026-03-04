@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.hsqldb.jdbc.JDBCDriver
-    url: jdbc:hsqldb:mem:contacts-db
+    url: jdbc:hsqldb:mem:contact-book-db
     username: sa
     password:
   sql:
