@@ -22,7 +22,6 @@ POST {{BASE_URL}}/contacts?trace=true
 Content-Type: application/json
 
 {
-    "id": 11,
     "firstName": "Jackelin",
     "lastName": "Cadavid",
     "phoneNumber": "1158643071"
