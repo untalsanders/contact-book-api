@@ -20,11 +20,24 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: create-drop
-  # Security config
-  security:
-    user:
-      name: sanders
-      password: 12345
+
+# Security config
+#  security:
+#    user:
+#      name: sanders
+#      password: 12345
+
+management:
+  info:
+    git:
+      mode: full
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
 
 contacts:
-  trace: true
+  trace: ${CONTACT_TRACE:false}
