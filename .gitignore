@@ -10,3 +10,6 @@ target
 
 ### H2-Database ###
 src/main/resources/data/*.db
+
+# Environment variables
+.env
