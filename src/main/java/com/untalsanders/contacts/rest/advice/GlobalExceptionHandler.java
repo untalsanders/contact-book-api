@@ -1,5 +1,7 @@
 package com.untalsanders.contacts.rest.advice;
 
+import com.untalsanders.contacts.exception.ContactAlreadyExistsException;
+import com.untalsanders.contacts.exception.ContactNotFoundException;
 import com.untalsanders.contacts.shared.domain.ErrorMessage;
 import com.untalsanders.contacts.shared.domain.ErrorResponse;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -56,6 +58,27 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleNoSuchElementFoundException(NoSuchElementException exception, WebRequest request) {
         LOG.error(ErrorMessage.FAILED_TO_FIND_REQUESTED_ELEMENT.getMessage(), exception);
         return buildErrorResponse(exception, request);
+    }
+
+    @ExceptionHandler(ContactNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Object> handleContactNotFoundException(ContactNotFoundException exception, WebRequest request) {
+        LOG.error(ErrorMessage.FAILED_TO_FIND_REQUESTED_ELEMENT.getMessage(), exception);
+        return buildErrorResponse(exception, exception.getMessage(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(ContactAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> handleContactAlreadyExistsException(ContactAlreadyExistsException exception, WebRequest request) {
+        LOG.error(ErrorMessage.ITEM_ALREADY_EXISTS.getMessage(), exception);
+        return buildErrorResponse(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException exception, WebRequest request) {
+        LOG.error(exception.getMessage(), exception);
+        return buildErrorResponse(exception, exception.getMessage(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(SuchElementAlreadyExistsException.class)

@@ -1,5 +1,7 @@
 package com.untalsanders.contacts.usecase;
 
+import com.untalsanders.contacts.shared.domain.Result;
+
 public interface DeleteContactUseCase {
-    void deleteContact(Long id);
+    Result<Void> deleteContact(Long id);
 }

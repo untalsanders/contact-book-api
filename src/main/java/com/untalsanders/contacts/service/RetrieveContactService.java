@@ -1,8 +1,8 @@
 package com.untalsanders.contacts.service;
 
-import com.untalsanders.contacts.exception.ContactNotFoundException;
 import com.untalsanders.contacts.model.Contact;
 import com.untalsanders.contacts.repository.ContactRepository;
+import com.untalsanders.contacts.shared.domain.Result;
 import com.untalsanders.contacts.usecase.RetrieveContactUseCase;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +18,13 @@ public class RetrieveContactService implements RetrieveContactUseCase {
     }
 
     @Override
-    public Optional<Contact> getContact(Long id) {
+    public Result<Contact> getContact(Long id) {
         Optional<Contact> contact = contactRepository.findById(id);
-        if (contact.isEmpty()) {
-            throw new ContactNotFoundException(String.format("Contact with id %s not found", id));
-        }
-        return contact;
+        return contact.map(Result::success).orElseGet(() -> Result.failure(String.format("Contact with id %s not found", id)));
     }
 
     @Override
-    public List<Contact> getContacts() {
-        return contactRepository.findAll();
+    public Result<List<Contact>> getContacts() {
+        return Result.success(contactRepository.findAll());
     }
 }

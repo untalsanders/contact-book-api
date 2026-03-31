@@ -1,8 +1,8 @@
 package com.untalsanders.contacts.service;
 
-import com.untalsanders.contacts.exception.ContactNotFoundException;
 import com.untalsanders.contacts.model.Contact;
 import com.untalsanders.contacts.repository.ContactRepository;
+import com.untalsanders.contacts.shared.domain.Result;
 import com.untalsanders.contacts.usecase.UpdateContactUseCase;
 import org.springframework.stereotype.Service;
 
@@ -17,22 +17,26 @@ public class UpdateContactService implements UpdateContactUseCase {
     }
 
     @Override
-    public Optional<Contact> updateContact(Long id, Contact contact) throws ContactNotFoundException {
+    public Result<Contact> updateContact(Long id, Contact contact) {
         if (contact.getId() == null) {
             contact.setId(id);
         }
 
         if (!id.equals(contact.getId())) {
-            throw new IllegalArgumentException(
+            return Result.failure(
                 String.format("Path variable /id=%s no match with Contact[id=%s]", id, contact.getId())
             );
         }
 
         Optional<Contact> contactToUpdate = contactRepository.findById(id);
         if (contactToUpdate.isEmpty()) {
-            throw new ContactNotFoundException(String.format("Contact with id %s not found", id));
+            return Result.failure(String.format("Contact with id %s not found", id));
         }
 
-        return Optional.of(contactRepository.update(id, contact));
+        try {
+            return Result.success(contactRepository.update(id, contact));
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
     }
 }

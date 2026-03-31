@@ -3,6 +3,7 @@ package com.untalsanders.contacts.service;
 import com.untalsanders.contacts.usecase.CreateContactUseCase;
 import com.untalsanders.contacts.model.Contact;
 import com.untalsanders.contacts.repository.ContactRepository;
+import com.untalsanders.contacts.shared.domain.Result;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +16,12 @@ public class CreateContactService implements CreateContactUseCase {
     }
 
     @Override
-    public void createContact(Contact contact) {
-        repository.save(contact);
+    public Result<Contact> createContact(Contact contact) {
+        try {
+            repository.save(contact);
+            return Result.success(contact);
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
     }
 }
