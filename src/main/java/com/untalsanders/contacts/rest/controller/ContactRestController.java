@@ -4,7 +4,6 @@ import com.untalsanders.contacts.exception.ContactNotFoundException;
 import com.untalsanders.contacts.mapper.ContactMapper;
 import com.untalsanders.contacts.model.Contact;
 import com.untalsanders.contacts.rest.dto.ContactDto;
-import com.untalsanders.contacts.shared.domain.Result;
 import com.untalsanders.contacts.usecase.CreateContactUseCase;
 import com.untalsanders.contacts.usecase.DeleteContactUseCase;
 import com.untalsanders.contacts.usecase.RetrieveContactUseCase;

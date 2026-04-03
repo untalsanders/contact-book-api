@@ -1,0 +1,23 @@
+C4Container
+    title Diagrama de Contenedores - Personal Financing Manager
+
+    Person(user, "Usuario Registrado", "Administra sus finanzas personales.")
+
+    System_Boundary(c1, "Financing Manager System") {
+        Container(spa, "Single Page Application", "React/Angular/Vue", "Provee la interfaz web.")
+        Container(mobile, "Mobile App", "iOS/Android", "Provee la interfaz móvil.")
+
+        Container(api, "REST API Application", "Java 21, Spring Boot 3", "Maneja la lógica de negocio, seguridad (JWT/API Key) y expone los endpoints.")
+
+        ContainerDb(db_relacional, "Base de Datos Principal", "PostgreSQL / MySQL", "Almacena usuarios, billeteras, categorías y transacciones.")
+        ContainerDb(db_memoria, "Base de Datos en Memoria", "H2 / HSQLDB", "Utilizada para pruebas de integración y desarrollo local.")
+    }
+
+    Rel(user, spa, "Usa", "HTTPS")
+    Rel(user, mobile, "Usa")
+
+    Rel(spa, api, "Realiza llamadas a", "JSON/HTTPS")
+    Rel(mobile, api, "Realiza llamadas a", "JSON/HTTPS")
+
+    Rel_Right(api, db_relacional, "Lee y escribe en", "JDBC/JPA")
+    Rel_Right(api, db_memoria, "Lee y escribe en", "JDBC/JPA")
