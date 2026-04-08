@@ -1,22 +1,21 @@
 package com.untalsanders.contacts.rest.controller;
 
-import com.untalsanders.contacts.exception.ContactNotFoundException;
 import com.untalsanders.contacts.mapper.ContactMapper;
-import com.untalsanders.contacts.model.Contact;
-import com.untalsanders.contacts.rest.dto.ContactDto;
+import com.untalsanders.contacts.rest.dto.ApiResponse;
+import com.untalsanders.contacts.rest.dto.ContactRequest;
+import com.untalsanders.contacts.rest.dto.ContactResponse;
 import com.untalsanders.contacts.usecase.CreateContactUseCase;
 import com.untalsanders.contacts.usecase.DeleteContactUseCase;
 import com.untalsanders.contacts.usecase.RetrieveContactUseCase;
 import com.untalsanders.contacts.usecase.UpdateContactUseCase;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/contacts")
@@ -30,49 +29,52 @@ public class ContactRestController {
     private final ContactMapper contactMapper;
 
     @GetMapping
-    public ResponseEntity<List<ContactDto>> getAllContacts() {
-        return retrieveContactUseCase.getContacts()
-            .map(contactMapper::toContactDtoCollection)
-            .map(ResponseEntity::ok)
-            .orElseThrow(RuntimeException::new);
+    public ResponseEntity<ApiResponse<List<ContactResponse>>> getAllContacts() {
+        var contacts = retrieveContactUseCase.getContacts();
+        ApiResponse<List<ContactResponse>> responseBody = ApiResponse.success(
+            contactMapper.toContactResponseCollection(contacts.getOrElse(List.of())),
+            "Contacts retrieved successfully"
+        );
+        return ResponseEntity.ok(responseBody);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ContactDto> getContactById(@PathVariable Long id) {
-        return retrieveContactUseCase.getContact(id)
-            .map(contactMapper::toContactDto)
-            .map(ResponseEntity::ok)
-            .orElseThrow(ContactNotFoundException::new);
+    public ResponseEntity<ApiResponse<ContactResponse>> getContactById(@PathVariable Long id) {
+        var contact = retrieveContactUseCase.getContact(id);
+        ApiResponse<ContactResponse> responseBody = ApiResponse.success(
+            contactMapper.toContactResponse(contact.getOrElse(null)),
+            "Contact retrieved successfully"
+        );
+        return ResponseEntity.ok(responseBody);
     }
 
     @PostMapping
-    public ResponseEntity<ContactDto> createContact(@RequestBody ContactDto contactDto) {
-        Contact contact = contactMapper.toContact(contactDto);
-        return createContactUseCase.createContact(contact)
-            .map(contactMapper::toContactDto)
-            .map(dto -> ResponseEntity.status(HttpStatus.CREATED).body(dto))
-            .orElseThrow(RuntimeException::new);
+    public ResponseEntity<ApiResponse<ContactResponse>> createContact(@Valid @RequestBody ContactRequest contactRequest) {
+        var contact = createContactUseCase.createContact(contactMapper.toContact(contactRequest));
+        ApiResponse<ContactResponse> responseBody = ApiResponse.success(
+            contactMapper.toContactResponse(contact.getOrElse(null)),
+            "Contact created successfully"
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ContactDto> updateContact(@PathVariable Long id, @RequestBody ContactDto contactDto) {
-        Contact contactToUpdate = contactMapper.toContact(contactDto);
-        return updateContactUseCase.updateContact(id, contactToUpdate)
-            .map(contactMapper::toContactDto)
-            .map(ResponseEntity::ok)
-            .orElseThrow(error -> error.contains("not found")
-                ? new ContactNotFoundException(error)
-                : new IllegalArgumentException(error));
+    public ResponseEntity<ApiResponse<ContactResponse>> updateContact(@PathVariable Long id, @Valid @RequestBody ContactRequest contactRequest) {
+        var contactToUpdate = updateContactUseCase.updateContact(id, contactMapper.toContact(contactRequest));
+        ApiResponse<ContactResponse> responseBody = ApiResponse.success(
+            contactMapper.toContactResponse(contactToUpdate.getOrElse(null)),
+            "Contact updated successfully"
+        );
+        return ResponseEntity.ok(responseBody);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteContactById(@PathVariable Long id) {
-        return deleteContactUseCase.deleteContact(id)
-            .map(v -> {
-                Map<String, Boolean> response = new HashMap<>();
-                response.put("deleted", Boolean.TRUE);
-                return ResponseEntity.ok(response);
-            })
-            .orElseThrow(ContactNotFoundException::new);
+    public ResponseEntity<ApiResponse<Void>> deleteContactById(@PathVariable Long id) {
+        deleteContactUseCase.deleteContact(id);
+        ApiResponse<Void> responseBody = ApiResponse.success(
+            null,
+            "Contact deleted successfully"
+        );
+        return ResponseEntity.ok(responseBody);
     }
 }
