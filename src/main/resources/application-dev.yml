@@ -41,3 +41,16 @@ management:
 
 contacts:
   trace: ${CONTACT_TRACE:false}
+
+logging:
+  level:
+    org:
+      hibernate:
+        orm:
+          connections:
+            # silencia el resumen de conexión de Hibernate (donde aparece "undefined/unknown")
+            pooling: WARN
+    com:
+      zaxxer:
+        # silencia los mensajes de inicio de HikariPool
+        hikari: WARN
