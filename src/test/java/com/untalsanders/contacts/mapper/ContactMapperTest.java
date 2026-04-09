@@ -1,8 +1,9 @@
 package com.untalsanders.contacts.mapper;
 
-import com.untalsanders.contacts.entity.ContactEntity;
-import com.untalsanders.contacts.model.Contact;
-import com.untalsanders.contacts.model.Name;
+import com.untalsanders.contacts.contactbook.infrastructure.persistence.entity.ContactEntity;
+import com.untalsanders.contacts.contactbook.infrastructure.persistence.mapper.ContactMapper;
+import com.untalsanders.contacts.contactbook.domain.model.Contact;
+import com.untalsanders.contacts.contactbook.domain.model.Name;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.Mapper;

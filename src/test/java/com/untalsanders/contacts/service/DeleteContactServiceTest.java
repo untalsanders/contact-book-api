@@ -1,8 +1,9 @@
 package com.untalsanders.contacts.service;
 
-import com.untalsanders.contacts.model.Contact;
-import com.untalsanders.contacts.model.Name;
-import com.untalsanders.contacts.repository.ContactRepository;
+import com.untalsanders.contacts.contactbook.application.service.DeleteContactService;
+import com.untalsanders.contacts.contactbook.domain.model.Contact;
+import com.untalsanders.contacts.contactbook.domain.model.Name;
+import com.untalsanders.contacts.contactbook.domain.repository.ContactRepository;
 import com.untalsanders.contacts.shared.domain.Result;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
