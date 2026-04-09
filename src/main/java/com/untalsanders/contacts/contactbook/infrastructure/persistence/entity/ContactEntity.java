@@ -13,6 +13,7 @@ import lombok.*;
 @Entity
 @Table(name = "contacts")
 @ToString
+@Builder
 public class ContactEntity extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String firstname;

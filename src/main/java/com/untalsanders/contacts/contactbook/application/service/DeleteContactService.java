@@ -4,20 +4,20 @@ import com.untalsanders.contacts.contactbook.domain.model.Contact;
 import com.untalsanders.contacts.contactbook.domain.repository.ContactRepository;
 import com.untalsanders.contacts.shared.domain.Result;
 import com.untalsanders.contacts.contactbook.application.usecase.DeleteContactUseCase;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class DeleteContactService implements DeleteContactUseCase {
     private final ContactRepository contactRepository;
 
-    public DeleteContactService(ContactRepository contactRepository) {
-        this.contactRepository = contactRepository;
-    }
-
     @Override
-    public Result<Void> deleteContact(Long id) {
+    public Result<Void> deleteContact(UUID id) {
         try {
             Optional<Contact> contact = contactRepository.findById(id);
             if (contact.isEmpty()) {

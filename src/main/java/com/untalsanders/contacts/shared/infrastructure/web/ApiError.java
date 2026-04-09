@@ -1,4 +1,4 @@
-package com.untalsanders.contacts.shared.web;
+package com.untalsanders.contacts.shared.infrastructure.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

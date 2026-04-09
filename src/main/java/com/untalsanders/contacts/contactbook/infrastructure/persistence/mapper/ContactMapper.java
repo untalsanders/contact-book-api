@@ -16,11 +16,25 @@ public interface ContactMapper {
 
     ContactMapper INSTANCE = Mappers.getMapper(ContactMapper.class);
 
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "firstName", target = "name.first")
     @Mapping(source = "lastName", target = "name.last")
     @Mapping(source = "phoneNumber", target = "phone")
     Contact toContact(ContactRequest contactRequest);
 
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "firstname", target = "name.first")
+    @Mapping(source = "lastname", target = "name.last")
+    @Mapping(source = "phone", target = "phone")
+    Contact entityToDomain(ContactEntity contactEntity);
+
+    @InheritInverseConfiguration
+    @Mapping(source = "name.first", target = "firstname")
+    @Mapping(source = "name.last", target = "lastname")
+    @Mapping(source = "phone", target = "phone")
+    ContactEntity domainToEntity(Contact contact);
+
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "name.first", target = "firstName")
     @Mapping(source = "name.last", target = "lastName")
     @Mapping(source = "phone", target = "phoneNumber")
@@ -28,12 +42,5 @@ public interface ContactMapper {
 
     List<ContactResponse> toContactResponseCollection(List<Contact> contactList);
 
-    @Mapping(source = "firstname", target = "name.first")
-    @Mapping(source = "lastname", target = "name.last")
-    Contact entityToDomain(ContactEntity contactEntity);
-
     List<Contact> toContacts(List<ContactEntity> contactEntities);
-
-    @InheritInverseConfiguration
-    ContactEntity domainToEntity(Contact contact);
 }

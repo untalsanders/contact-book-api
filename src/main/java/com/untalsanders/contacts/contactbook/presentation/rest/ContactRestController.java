@@ -1,6 +1,6 @@
 package com.untalsanders.contacts.contactbook.presentation.rest;
 
-import com.untalsanders.contacts.shared.web.ApiResponse;
+import com.untalsanders.contacts.shared.infrastructure.web.ApiResponse;
 import com.untalsanders.contacts.contactbook.application.dto.request.ContactRequest;
 import com.untalsanders.contacts.contactbook.application.dto.response.ContactResponse;
 import com.untalsanders.contacts.contactbook.application.usecase.CreateContactUseCase;
@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/contacts")
@@ -37,7 +38,7 @@ public class ContactRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ContactResponse>> getContactById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<ContactResponse>> getContactById(@PathVariable UUID id) {
         var contactResult = retrieveContactUseCase.getContact(id);
         ApiResponse<ContactResponse> responseBody = ApiResponse.success(
             contactResult.getOrElse(null),
@@ -57,7 +58,7 @@ public class ContactRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<ContactResponse>> updateContact(@PathVariable Long id, @Valid @RequestBody ContactRequest contactRequest) {
+    public ResponseEntity<ApiResponse<ContactResponse>> updateContact(@PathVariable UUID id, @Valid @RequestBody ContactRequest contactRequest) {
         var contactResult = updateContactUseCase.updateContact(id, contactRequest);
         ApiResponse<ContactResponse> responseBody = ApiResponse.success(
             contactResult.getOrElse(null),
@@ -67,7 +68,7 @@ public class ContactRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteContactById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteContactById(@PathVariable UUID id) {
         deleteContactUseCase.deleteContact(id);
         ApiResponse<Void> responseBody = ApiResponse.success(
             null,

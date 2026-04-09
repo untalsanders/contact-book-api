@@ -10,96 +10,79 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class JpaContactRepositoryImpl implements ContactRepository {
 
     @PersistenceContext
-    private EntityManager em;
-
-    private static final Logger LOG = LoggerFactory.getLogger(JpaContactRepositoryImpl.class);
-    private final ContactMapper contactMapper;
+    private EntityManager entityManager;
+    private final ContactMapper mapper;
 
     @Override
-    public Optional<Contact> findById(Long id) {
-        Query query = this.em.createQuery("SELECT contact FROM ContactEntity contact WHERE contact.id = :id");
-        query.setParameter("id", id);
-        Contact contactFound = contactMapper.entityToDomain((ContactEntity) query.getSingleResult());
-        LOG.info("Contact found: {}", contactFound);
-        return Optional.ofNullable(contactFound);
+    public Optional<Contact> findById(UUID id) {
+        return Optional.ofNullable(entityManager.find(ContactEntity.class, id))
+            .map(mapper::entityToDomain)
+            .map(contact -> {
+                log.info("Contact found: {}", contact);
+                return contact;
+            });
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<Contact> findAll() {
-        Query query = this.em.createQuery("SELECT contact FROM ContactEntity contact");
+        Query query = this.entityManager.createQuery("SELECT contact FROM ContactEntity contact");
         Collection<ContactEntity> contactEntityCollection = query.getResultList();
-        LOG.info("Total contacts found: {}", contactEntityCollection.size());
-        return contactMapper.toContacts(contactEntityCollection.stream().toList());
+        log.info("Total contacts found: {}", contactEntityCollection.size());
+        return mapper.toContacts(contactEntityCollection.stream().toList());
     }
 
     @Override
-    @Transactional
-    public void save(Contact contact) {
-        ContactEntity contactEntity = contactMapper.domainToEntity(contact);
-        if (contactEntity.getId() == null) {
-            this.em.persist(contactEntity);
-            LOG.info("Contact saved");
+    public Contact save(Contact contact) {
+        ContactEntity entity = mapper.domainToEntity(contact);
+        if (entity.getId() == null) {
+             entityManager.persist(entity);
+             log.info("Contact saved");
         } else {
-            this.em.merge(contactEntity);
-            LOG.info("Contact updated");
+            entity = entityManager.merge(entity);
+            log.info("Contact updated");
         }
+        return mapper.entityToDomain(entity);
     }
 
     @Override
     @Transactional
-    public Contact update(Long id, Contact contact) {
+    public Contact update(UUID id, Contact contact) {
         Optional<Contact> existingContact = findById(id);
         if (existingContact.isEmpty()) {
             throw new ContactNotFoundException(String.valueOf(id));
         }
-        ContactEntity contactEntity = contactMapper.domainToEntity(contact);
+        ContactEntity contactEntity = mapper.domainToEntity(contact);
         contactEntity.setId(id); // Ensure the ID is set
-        ContactEntity updatedEntity = em.merge(contactEntity);
-        LOG.info("Contact updated: {}", updatedEntity.getId());
-        return contactMapper.entityToDomain(updatedEntity);
+        ContactEntity updatedEntity = entityManager.merge(contactEntity);
+        log.info("Contact updated: {}", updatedEntity.getId());
+        return mapper.entityToDomain(updatedEntity);
     }
 
     @Override
     @Transactional
-    public void delete(Contact contact) {
-        ContactEntity contactEntity = contactMapper.domainToEntity(contact);
-        if (contactEntity.getId() != null) {
-            ContactEntity managedEntity = em.find(ContactEntity.class, contactEntity.getId());
-            if (managedEntity != null) {
-                em.remove(managedEntity);
-                LOG.info("Contact deleted: {}", contact.getId());
-            } else {
-                LOG.warn("Contact isn't found for deletion: {}", contact.getId());
-            }
-        } else {
-            LOG.warn("Contact ID is null, cannot delete");
-        }
-    }
-
-    @Override
-    @Transactional
-    public void deleteById(Long id) {
-        ContactEntity contactEntity = em.find(ContactEntity.class, id);
+    public void deleteById(UUID id) {
+        ContactEntity contactEntity = entityManager.find(ContactEntity.class, id);
         if (contactEntity != null) {
-            em.remove(contactEntity);
-            LOG.info("Deleted Contact with ID: {}", id);
+            entityManager.remove(contactEntity);
+            log.info("Deleted Contact with ID: {}", id);
         } else {
-            LOG.warn("Contact isn't found for deletion with ID: {}", id);
+            log.warn("Contact isn't found for deletion with ID: {}", id);
         }
     }
 }

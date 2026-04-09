@@ -7,26 +7,23 @@ import com.untalsanders.contacts.contactbook.application.dto.request.ContactRequ
 import com.untalsanders.contacts.contactbook.application.dto.response.ContactResponse;
 import com.untalsanders.contacts.shared.domain.Result;
 import com.untalsanders.contacts.contactbook.application.usecase.CreateContactUseCase;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class CreateContactService implements CreateContactUseCase {
 
     private final ContactRepository repository;
     private final ContactMapper contactMapper;
 
-    public CreateContactService(ContactRepository contactRepository, ContactMapper contactMapper) {
-        this.repository = contactRepository;
-        this.contactMapper = contactMapper;
-    }
-
     @Override
     public Result<ContactResponse> createContact(ContactRequest request) {
         try {
             Contact contact = contactMapper.toContact(request);
-            repository.save(contact);
-            return Result.success(contactMapper.toContactResponse(contact));
-        } catch (Exception e) {
+            return Result.success(contactMapper.toContactResponse(repository.save(contact)));
+        } catch (IllegalArgumentException e) {
             return Result.failure(e.getMessage());
         }
     }

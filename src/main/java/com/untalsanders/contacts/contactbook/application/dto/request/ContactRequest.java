@@ -4,6 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 
 public record ContactRequest(
     @NotBlank
+    String id,
+
+    @NotBlank
     String firstName,
 
     String lastName,

@@ -4,6 +4,8 @@ import com.untalsanders.contacts.contactbook.application.dto.request.ContactRequ
 import com.untalsanders.contacts.contactbook.application.dto.response.ContactResponse;
 import com.untalsanders.contacts.shared.domain.Result;
 
+import java.util.UUID;
+
 public interface UpdateContactUseCase {
-    Result<ContactResponse> updateContact(Long id, ContactRequest request);
+    Result<ContactResponse> updateContact(UUID id, ContactRequest request);
 }

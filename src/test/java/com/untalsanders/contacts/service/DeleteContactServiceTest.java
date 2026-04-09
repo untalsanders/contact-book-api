@@ -8,11 +8,13 @@ import com.untalsanders.contacts.shared.domain.Result;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -30,7 +32,7 @@ class DeleteContactServiceTest {
     @DisplayName("Should successfully delete a contact")
     void should_successfully_delete_contact() {
         // Given
-        Long id = 1L;
+        UUID id = UUID.randomUUID();
         Contact contact = new Contact(id, new Name("Sanders", "Gutiérrez"), "1160219207");
         when(contactRepository.findById(id)).thenReturn(Optional.of(contact));
 
@@ -48,7 +50,7 @@ class DeleteContactServiceTest {
     @DisplayName("Should return failure when contact to delete is not found")
     void should_return_failure_when_contact_to_delete_not_found() {
         // Given
-        Long id = 1L;
+        UUID id = UUID.randomUUID();
         when(contactRepository.findById(id)).thenReturn(Optional.empty());
 
         // When
@@ -58,14 +60,14 @@ class DeleteContactServiceTest {
         assertFalse(result.isSuccess());
         assertEquals(String.format("Contact with id %s not found", id), result.getError());
         verify(contactRepository).findById(id);
-        verify(contactRepository, never()).deleteById(anyLong());
+        verify(contactRepository, never()).deleteById(UUID.fromString(ArgumentMatchers.anyString()));
     }
 
     @Test
-    @DisplayName("Should return failure when repository throws exception")
+    @DisplayName("Should return failure when the repository throws an exception")
     void should_return_failure_when_repository_throws_exception() {
         // Given
-        Long id = 1L;
+        UUID id = UUID.randomUUID();
         String errorMessage = "Database error";
         when(contactRepository.findById(id)).thenThrow(new RuntimeException(errorMessage));
 
@@ -76,6 +78,6 @@ class DeleteContactServiceTest {
         assertFalse(result.isSuccess());
         assertEquals(errorMessage, result.getError());
         verify(contactRepository).findById(id);
-        verify(contactRepository, never()).deleteById(anyLong());
+        verify(contactRepository, never()).deleteById(UUID.fromString(ArgumentMatchers.anyString()));
     }
 }

@@ -7,22 +7,22 @@ import com.untalsanders.contacts.contactbook.application.dto.request.ContactRequ
 import com.untalsanders.contacts.contactbook.application.dto.response.ContactResponse;
 import com.untalsanders.contacts.shared.domain.Result;
 import com.untalsanders.contacts.contactbook.application.usecase.UpdateContactUseCase;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class UpdateContactService implements UpdateContactUseCase {
+
     private final ContactRepository contactRepository;
     private final ContactMapper contactMapper;
 
-    public UpdateContactService(ContactRepository contactRepository, ContactMapper contactMapper) {
-        this.contactRepository = contactRepository;
-        this.contactMapper = contactMapper;
-    }
-
     @Override
-    public Result<ContactResponse> updateContact(Long id, ContactRequest request) {
+    public Result<ContactResponse> updateContact(UUID id, ContactRequest request) {
         Contact contact = contactMapper.toContact(request);
         if (contact.getId() == null) {
             contact.setId(id);

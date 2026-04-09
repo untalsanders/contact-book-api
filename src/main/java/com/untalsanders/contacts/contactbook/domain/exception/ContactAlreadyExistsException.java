@@ -6,7 +6,7 @@ package com.untalsanders.contacts.contactbook.domain.exception;
  *
  * @author Sanders Gutiérrez
  */
-public class ContactAlreadyExistsException extends RuntimeException {
+public class ContactAlreadyExistsException extends ContactException {
     public ContactAlreadyExistsException(String message) {
         super(message);
     }

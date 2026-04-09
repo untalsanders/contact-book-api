@@ -4,6 +4,7 @@ import com.untalsanders.contacts.contactbook.application.dto.response.ContactRes
 import com.untalsanders.contacts.shared.domain.Result;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface RetrieveContactUseCase {
     /**
@@ -12,7 +13,7 @@ public interface RetrieveContactUseCase {
      * @param id the id to search for
      * @return the <code>Result</code> containing the <code>ContactResponse</code> if found
      */
-    Result<ContactResponse> getContact(Long id);
+    Result<ContactResponse> getContact(UUID id);
 
     /**
      * Retrieve all <code>Contact</code>s.
