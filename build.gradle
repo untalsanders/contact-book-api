@@ -1,25 +1,27 @@
 buildscript {
     ext {
-        springBootVer = '3.5.5'
+        springBootVer = '3.5.14'
     }
 }
 
 plugins {
     id 'java'
+    id 'idea'
     id 'checkstyle'
     id 'jacoco'
     id 'org.springframework.boot' version "${springBootVer}"
     id 'com.gorylenko.gradle-git-properties' version '2.5.7'
 }
 
+apply plugin: 'idea'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'com.untalsanders.contacts.api'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
@@ -33,13 +35,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // Third-party dependencies
-//    implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
-//    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.13.0'
-//    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.13.0'
+    implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.13.0'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.13.0'
 
     implementation 'org.apache.commons:commons-lang3'
     implementation libs.springdoc.openapi.starter.webmvc.ui
@@ -68,6 +70,10 @@ dependencies {
 }
 
 test {
+    testLogging {
+        /*events "passed", "skipped", "failed"*/
+        showStandardStreams = true
+    }
     useJUnitPlatform()
     finalizedBy jacocoTestReport
 }
