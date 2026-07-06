@@ -1,14 +1,13 @@
 package com.untalsanders.contacts.service;
 
-import com.untalsanders.contacts.contactbook.application.service.DeleteContactService;
-import com.untalsanders.contacts.contactbook.domain.model.Contact;
-import com.untalsanders.contacts.contactbook.domain.model.Name;
-import com.untalsanders.contacts.contactbook.domain.repository.ContactRepository;
-import com.untalsanders.contacts.shared.domain.Result;
+import com.untalsanders.contacts.contact.application.service.DeleteContactService;
+import com.untalsanders.contacts.contact.domain.Contact;
+import com.untalsanders.contacts.contact.domain.Name;
+import com.untalsanders.contacts.contact.application.port.out.ContactRepository;
+import com.untalsanders.contacts.shared.domain.vo.Result;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -17,6 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -60,7 +60,7 @@ class DeleteContactServiceTest {
         assertFalse(result.isSuccess());
         assertEquals(String.format("Contact with id %s not found", id), result.getError());
         verify(contactRepository).findById(id);
-        verify(contactRepository, never()).deleteById(UUID.fromString(ArgumentMatchers.anyString()));
+        verify(contactRepository, never()).deleteById(any(UUID.class));
     }
 
     @Test
@@ -78,6 +78,6 @@ class DeleteContactServiceTest {
         assertFalse(result.isSuccess());
         assertEquals(errorMessage, result.getError());
         verify(contactRepository).findById(id);
-        verify(contactRepository, never()).deleteById(UUID.fromString(ArgumentMatchers.anyString()));
+        verify(contactRepository, never()).deleteById(any(UUID.class));
     }
 }

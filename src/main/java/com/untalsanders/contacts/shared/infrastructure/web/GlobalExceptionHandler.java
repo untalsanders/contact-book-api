@@ -1,10 +1,9 @@
 package com.untalsanders.contacts.shared.infrastructure.web;
 
-import com.untalsanders.contacts.contactbook.domain.exception.ContactNotFoundException;
-import com.untalsanders.contacts.contactbook.domain.exception.DuplicateContactException;
-import com.untalsanders.contacts.contactbook.domain.exception.InvalidContactDataException;
+import com.untalsanders.contacts.contact.application.exception.ContactNotFoundException;
+import com.untalsanders.contacts.contact.application.exception.DuplicateContactException;
+import com.untalsanders.contacts.contact.application.exception.InvalidContactDataException;
 import com.untalsanders.contacts.shared.domain.ErrorMessage;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;

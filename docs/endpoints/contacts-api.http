@@ -6,7 +6,7 @@
 ###
 # group: Contacts
 # @name List Contacts
-GET {{BASE_URL}}/contacts
+GET {{BASE_URL}}/api/v1/contacts
 # Authorization: Basic {{user}} {{password}}
 
 > {%
@@ -18,7 +18,7 @@ GET {{BASE_URL}}/contacts
 ###
 # group: Contacts
 # @name Save Contact
-POST {{BASE_URL}}/contacts?trace=true
+POST {{BASE_URL}}/api/v1/contacts?trace=true
 Content-Type: application/json
 
 {
@@ -37,7 +37,7 @@ Content-Type: application/json
 @id=4
 # group: Contacts
 # @name Get Contact
-GET {{BASE_URL}}/contacts/{{id}}?trace=true
+GET {{BASE_URL}}/api/v1/contacts/{{id}}?trace=true
 
 > {%
     client.test("Get Contact returns 200", function () {
@@ -48,7 +48,7 @@ GET {{BASE_URL}}/contacts/{{id}}?trace=true
 ###
 # group: Contacts
 # @name Update Contact
-PUT {{BASE_URL}}/contacts/{{id}}
+PUT {{BASE_URL}}/api/v1/contacts/{{id}}
 Content-Type: application/json
 
 {
@@ -66,7 +66,7 @@ Content-Type: application/json
 ###
 # group: Contacts
 # @name Delete Contact
-DELETE {{BASE_URL}}/contacts/{{id}}
+DELETE {{BASE_URL}}/api/v1/contacts/{{id}}
 
 > {%
     client.test("Delete Contact returns 200", function () {
@@ -74,3 +74,27 @@ DELETE {{BASE_URL}}/contacts/{{id}}
         client.assert(response.body["deleted"] == true, "Expected object key \"deleted\" equal to \"true\" word but was: " + response.body)
     })
 %}
+
+
+###
+# group: Authentication
+# @name Register User
+POST {{BASE_URL}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+    "email": "sanders@domain.com",
+    "password": "S3cret12345"
+}
+
+
+###
+# group: Authentication
+# @name Login User
+POST {{BASE_URL}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+    "email": "",
+    "password": ""
+}

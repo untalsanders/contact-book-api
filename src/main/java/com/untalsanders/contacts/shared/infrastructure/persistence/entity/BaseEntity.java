@@ -1,9 +1,12 @@
 package com.untalsanders.contacts.shared.infrastructure.persistence.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
@@ -13,8 +16,8 @@ import java.util.UUID;
 @MappedSuperclass
 public abstract class BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @UuidGenerator
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(name = "id", updatable = false, nullable = false, length = 36)
+    @Column(name = "id", columnDefinition = "VARCHAR(36)", updatable = false, nullable = false, length = 36)
     private UUID id;
 }

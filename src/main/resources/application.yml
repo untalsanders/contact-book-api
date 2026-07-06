@@ -21,3 +21,8 @@ springdoc:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui.html
+
+jwt:
+  secret: ${JWT_SECRET:mySecretKeyForJWTTokenGenerationAndValidationOfContactsBookThatMustBeAtLeast256BitsLong}
+  expiration: ${JWT_EXPIRATION:86400000}
+

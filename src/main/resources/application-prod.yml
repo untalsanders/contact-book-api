@@ -2,15 +2,14 @@ spring:
   devtools:
     add-properties: false
   datasource:
-    driver-class-name: ${database.db-driver-class-name:org.postgresql.Driver}
-    url: jdbc:${database.db-driver:postgresql}://${database.db-host:localhost}:${database.db-port:5432}/${database.db-name:contactbook}
-    username: ${database.db-user:postgres}
-    password: ${database.db-pass:12345}
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:contactbook}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:12345}
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     defer-datasource-initialization: true
     open-in-view: false
 server:
@@ -19,12 +18,3 @@ server:
     include-binding-errors: always
     include-stacktrace: never
     include-exception: false
-
-database:
-  db-driver: ${DB_DRIVER}
-  db-driver-class-name: ${DB_DRIVER_CLASSNAME}
-  db-host: ${DB_HOST}
-  db-port: ${DB_PORT}
-  db-name: ${DB_NAME}
-  db-user: ${DB_USER}
-  db-pass: ${DB_PASS}

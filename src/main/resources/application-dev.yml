@@ -1,31 +1,25 @@
 spring:
   datasource:
-    driver-class-name: org.hsqldb.jdbc.JDBCDriver
-    url: jdbc:hsqldb:mem:contact-book-db
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:./data/h2/contact-book-api;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1
     username: sa
     password:
   sql:
     init:
       # SQL is written to be idempotent so this is safe
       mode: always
-      schema-locations: classpath*:db/${database.db-engine:hsqldb}/schema.sql
-      data-locations: classpath*:db/${database.db-engine:hsqldb}/data.sql
+      schema-locations: classpath*:db/h2/schema.sql
+      data-locations: classpath*:db/h2/data.sql
   h2:
     console:
       enabled: true
       path: /h2-console
   jpa:
-    show-sql: true
+    show-sql: false
     defer-datasource-initialization: true
     open-in-view: false
     hibernate:
       ddl-auto: create-drop
-
-# Security config
-#  security:
-#    user:
-#      name: sanders
-#      password: 12345
 
 management:
   info:
@@ -45,7 +39,10 @@ contacts:
 logging:
   level:
     org:
+      springframework:
+        boot: WARN
       hibernate:
+        SQL: ERROR
         orm:
           connections:
             # silencia el resumen de conexión de Hibernate (donde aparece "undefined/unknown")

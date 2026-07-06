@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVer = '3.5.14'
+        springBootVer = '3.5.16'
     }
 }
 
@@ -16,7 +16,7 @@ plugins {
 apply plugin: 'idea'
 apply plugin: 'io.spring.dependency-management'
 
-group = 'com.untalsanders.contacts.api'
+group = 'com.untalsanders.contact-book'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -51,7 +51,7 @@ dependencies {
 
     //-- Data stores and supporting libs --//
     runtimeOnly libs.h2
-    runtimeOnly libs.hsqldb
+    //runtimeOnly libs.hsqldb
     runtimeOnly libs.postgres
 
     // Compile ---------------------------------------------------------------------//

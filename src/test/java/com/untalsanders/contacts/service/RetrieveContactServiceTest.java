@@ -1,12 +1,12 @@
 package com.untalsanders.contacts.service;
 
-import com.untalsanders.contacts.contactbook.application.service.RetrieveContactService;
-import com.untalsanders.contacts.contactbook.infrastructure.persistence.mapper.ContactMapper;
-import com.untalsanders.contacts.contactbook.domain.model.Contact;
-import com.untalsanders.contacts.contactbook.domain.model.Name;
-import com.untalsanders.contacts.contactbook.domain.repository.ContactRepository;
-import com.untalsanders.contacts.contactbook.application.dto.response.ContactResponse;
-import com.untalsanders.contacts.shared.domain.Result;
+import com.untalsanders.contacts.contact.application.service.RetrieveContactService;
+import com.untalsanders.contacts.contact.infrastructure.persistence.mapper.ContactMapper;
+import com.untalsanders.contacts.contact.domain.Contact;
+import com.untalsanders.contacts.contact.domain.Name;
+import com.untalsanders.contacts.contact.application.port.out.ContactRepository;
+import com.untalsanders.contacts.contact.application.dto.ContactResponse;
+import com.untalsanders.contacts.shared.domain.vo.Result;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,8 +39,8 @@ class RetrieveContactServiceTest {
         // Given
         Contact contact1 = new Contact(UUID.randomUUID(), new Name("Sanders", "Gutiérrez"), "1160219207");
         Contact contact2 = new Contact(UUID.randomUUID(), new Name("John", "Doe"), "1234567890");
-        ContactResponse response1 = new ContactResponse(UUID.randomUUID(), "Sanders", "Gutiérrez", "1160219207");
-        ContactResponse response2 = new ContactResponse(UUID.randomUUID(), "John", "Doe", "1234567890");
+        ContactResponse response1 = new ContactResponse(UUID.randomUUID().toString(), "Sanders", "Gutiérrez", "1160219207");
+        ContactResponse response2 = new ContactResponse(UUID.randomUUID().toString(), "John", "Doe", "1234567890");
 
         when(contactRepository.findAll()).thenReturn(List.of(contact1, contact2));
         when(contactMapper.toContactResponseCollection(List.of(contact1, contact2)))
@@ -62,7 +62,7 @@ class RetrieveContactServiceTest {
         // Given
         UUID id = UUID.randomUUID();
         Contact contact = new Contact(id, new Name("Sanders", "Gutiérrez"), "1160219207");
-        ContactResponse response = new ContactResponse(id, "Sanders", "Gutiérrez", "1160219207");
+        ContactResponse response = new ContactResponse(id.toString(), "Sanders", "Gutiérrez", "1160219207");
 
         when(contactRepository.findById(id)).thenReturn(Optional.of(contact));
         when(contactMapper.toContactResponse(contact)).thenReturn(response);
