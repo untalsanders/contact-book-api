@@ -1,0 +1,56 @@
+﻿# Contact Book API
+
+###
+# group: Users
+# @name List Users
+GET {{BASE_URL}}/api/v1/users
+# Authorization: Basic {{user}} {{password}}
+
+> {%
+    client.test("GET all users returns 200", function () {
+        client.assert(response.status === 200, "Expected 200 but was: " + response.status)
+    })
+%}
+
+###
+@id=70e628ba-9a37-4dcd-b161-88f7c2bcab44
+# group: Users
+# @name Get User
+GET {{BASE_URL}}/api/v1/users/{{id}}?trace=true
+
+> {%
+    client.test("Get User returns 200", function () {
+        client.assert(response.status === 200, "Expected 200 but was: " + response.status)
+    })
+%}
+
+###
+# group: Users
+# @name Update User
+PUT {{BASE_URL}}/api/v1/users/{{id}}
+Content-Type: application/json
+
+{
+    "firstName": "Jackelin",
+    "lastName": "Cadavid"
+}
+
+> {%
+    client.test("Update user returns 201", function () {
+        client.assert(response.status === 201, "Expected 201 but was: " + response.status)
+    })
+%}
+
+###
+# group: Users
+# @name Delete User
+DELETE {{BASE_URL}}/api/v1/users/{{id}}
+
+> {%
+    client.test("Delete User returns 200", function () {
+        client.assert(response.status === 200, "Expected 200 but was: " + response.status)
+        client.assert(response.body["deleted"] == true, "Expected an object key \"deleted\" equal to the \"true\" word but was: " + response.body)
+    })
+%}
+
+

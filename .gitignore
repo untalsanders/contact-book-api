@@ -10,7 +10,6 @@ target
 *.iml
 *.iws
 *.ipr
-out/
 
 ### H2-Database ###
 *.db

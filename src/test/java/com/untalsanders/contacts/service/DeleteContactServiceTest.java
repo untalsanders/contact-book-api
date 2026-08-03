@@ -1,10 +1,11 @@
 package com.untalsanders.contacts.service;
 
-import com.untalsanders.contacts.contact.application.service.DeleteContactService;
-import com.untalsanders.contacts.contact.domain.Contact;
-import com.untalsanders.contacts.contact.domain.Name;
-import com.untalsanders.contacts.contact.application.port.out.ContactRepository;
-import com.untalsanders.contacts.shared.domain.vo.Result;
+import com.untalsanders.contacts.contact.application.DeleteContactService;
+import com.untalsanders.contacts.contact.domain.model.Contact;
+import com.untalsanders.contacts.contact.domain.model.ContactId;
+import com.untalsanders.contacts.contact.domain.model.Name;
+import com.untalsanders.contacts.contact.domain.port.out.ContactRepository;
+import com.untalsanders.contacts.shared.domain.Result;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,15 +34,15 @@ class DeleteContactServiceTest {
     void should_successfully_delete_contact() {
         // Given
         UUID id = UUID.randomUUID();
-        Contact contact = new Contact(id, new Name("Sanders", "Gutiérrez"), "1160219207");
+        Contact contact = new Contact(new ContactId(id.toString()), new Name("Sanders", "Gutiérrez"), "1160219207");
         when(contactRepository.findById(id)).thenReturn(Optional.of(contact));
 
         // When
-        Result<Void> result = deleteContactService.deleteContact(id);
+        Result<Boolean> result = deleteContactService.deleteContact(id);
 
         // Then
         assertTrue(result.isSuccess());
-        assertNull(result.getValue());
+        assertTrue(result.getValue());
         verify(contactRepository).findById(id);
         verify(contactRepository).deleteById(id);
     }
@@ -54,7 +55,7 @@ class DeleteContactServiceTest {
         when(contactRepository.findById(id)).thenReturn(Optional.empty());
 
         // When
-        Result<Void> result = deleteContactService.deleteContact(id);
+        Result<Boolean> result = deleteContactService.deleteContact(id);
 
         // Then
         assertFalse(result.isSuccess());
@@ -72,7 +73,7 @@ class DeleteContactServiceTest {
         when(contactRepository.findById(id)).thenThrow(new RuntimeException(errorMessage));
 
         // When
-        Result<Void> result = deleteContactService.deleteContact(id);
+        Result<Boolean> result = deleteContactService.deleteContact(id);
 
         // Then
         assertFalse(result.isSuccess());

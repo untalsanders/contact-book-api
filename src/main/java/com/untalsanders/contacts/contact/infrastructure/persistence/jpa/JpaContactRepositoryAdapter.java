@@ -1,10 +1,10 @@
 package com.untalsanders.contacts.contact.infrastructure.persistence.jpa;
 
-import com.untalsanders.contacts.contact.application.exception.ContactNotFoundException;
-import com.untalsanders.contacts.contact.domain.Contact;
-import com.untalsanders.contacts.contact.application.port.out.ContactRepository;
+import com.untalsanders.contacts.contact.domain.exception.ContactNotFoundException;
+import com.untalsanders.contacts.contact.domain.model.Contact;
+import com.untalsanders.contacts.contact.domain.port.out.ContactRepository;
 import com.untalsanders.contacts.contact.infrastructure.persistence.entity.ContactEntity;
-import com.untalsanders.contacts.contact.infrastructure.persistence.mapper.ContactMapper;
+import com.untalsanders.contacts.contact.infrastructure.persistence.mapper.ContactPersistenceMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -26,7 +26,7 @@ public class JpaContactRepositoryAdapter implements ContactRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
-    private final ContactMapper mapper;
+    private final ContactPersistenceMapper mapper;
 
     @Override
     public Optional<Contact> findById(UUID id) {
@@ -48,14 +48,21 @@ public class JpaContactRepositoryAdapter implements ContactRepository {
     }
 
     @Override
+    @Transactional
     public Contact save(Contact contact) {
         ContactEntity entity = mapper.domainToEntity(contact);
         if (entity.getId() == null) {
              entityManager.persist(entity);
              log.info("Contact saved");
         } else {
-            entity = entityManager.merge(entity);
-            log.info("Contact updated");
+            ContactEntity existing = entityManager.find(ContactEntity.class, entity.getId());
+            if (existing == null) {
+                entityManager.persist(entity);
+                log.info("Contact saved with predefined ID");
+            } else {
+                entity = entityManager.merge(entity);
+                log.info("Contact updated");
+            }
         }
         return mapper.entityToDomain(entity);
     }

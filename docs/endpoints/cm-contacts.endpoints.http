@@ -1,0 +1,75 @@
+﻿# Contact Book API
+
+###
+# group: Contacts
+# @name List Contacts
+GET {{BASE_URL}}/api/v1/contacts
+# Authorization: Basic {{user}} {{password}}
+
+> {%
+    client.test("GET all contacts returns 200", function () {
+        client.assert(response.status === 200, "Expected 200 but was: " + response.status)
+    })
+%}
+
+###
+# group: Contacts
+# @name Save Contact
+POST {{BASE_URL}}/api/v1/contacts?trace=true
+Content-Type: application/json
+
+{
+    "id": "{{$random.uuid}}",
+    "firstName": "Jackelin",
+    "lastName": "Cadavid",
+    "phoneNumber": "1158643071"
+}
+
+> {%
+    client.test("Save Contact returns 201", function () {
+        client.assert(response.status === 201, "Expected 201 but was: " + response.status)
+    })
+%}
+
+###
+@id=48c9484b-c840-4742-ba91-6e8161f222fb
+# group: Contacts
+# @name Get Contact
+GET {{BASE_URL}}/api/v1/contacts/{{id}}?trace=true
+
+> {%
+    client.test("Get Contact returns 200", function () {
+        client.assert(response.status === 200, "Expected 200 but was: " + response.status)
+    })
+%}
+
+###
+# group: Contacts
+# @name Update Contact
+PUT {{BASE_URL}}/api/v1/contacts/{{id}}
+Content-Type: application/json
+
+{
+    "firstName": "Jackelin",
+    "lastName": "Cadavid",
+    "phoneNumber": "0541158643072"
+}
+
+> {%
+    client.test("Update Contact returns 201", function () {
+        client.assert(response.status === 201, "Expected 201 but was: " + response.status)
+    })
+%}
+
+###
+# group: Contacts
+# @name Delete Contact
+DELETE {{BASE_URL}}/api/v1/contacts/{{id}}
+
+> {%
+    client.test("Delete contact returns 200", function () {
+        client.assert(response.status === 200, "Expected 200 but was: " + response.status)
+        client.assert(response.body["deleted"] == true, "Expected an object key \"deleted\" equal to the \"true\" word but was: " + response.body)
+    })
+%}
+

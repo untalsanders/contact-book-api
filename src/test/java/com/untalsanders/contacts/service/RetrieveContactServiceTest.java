@@ -1,12 +1,13 @@
 package com.untalsanders.contacts.service;
 
-import com.untalsanders.contacts.contact.application.service.RetrieveContactService;
-import com.untalsanders.contacts.contact.infrastructure.persistence.mapper.ContactMapper;
-import com.untalsanders.contacts.contact.domain.Contact;
-import com.untalsanders.contacts.contact.domain.Name;
-import com.untalsanders.contacts.contact.application.port.out.ContactRepository;
-import com.untalsanders.contacts.contact.application.dto.ContactResponse;
-import com.untalsanders.contacts.shared.domain.vo.Result;
+import com.untalsanders.contacts.contact.application.RetrieveContactService;
+import com.untalsanders.contacts.contact.domain.model.ContactId;
+import com.untalsanders.contacts.contact.web.mapper.ContactWebMapper;
+import com.untalsanders.contacts.contact.domain.model.Contact;
+import com.untalsanders.contacts.contact.domain.model.Name;
+import com.untalsanders.contacts.contact.domain.port.out.ContactRepository;
+import com.untalsanders.contacts.contact.web.dto.ContactResponse;
+import com.untalsanders.contacts.shared.domain.Result;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +29,7 @@ class RetrieveContactServiceTest {
     private ContactRepository contactRepository;
 
     @Mock
-    private ContactMapper contactMapper;
+    private ContactWebMapper contactMapper;
 
     @InjectMocks
     private RetrieveContactService retrieveContactService;
@@ -37,8 +38,8 @@ class RetrieveContactServiceTest {
     @DisplayName("Should return all contacts")
     void should_return_all_contacts() {
         // Given
-        Contact contact1 = new Contact(UUID.randomUUID(), new Name("Sanders", "Gutiérrez"), "1160219207");
-        Contact contact2 = new Contact(UUID.randomUUID(), new Name("John", "Doe"), "1234567890");
+        Contact contact1 = new Contact(new ContactId(UUID.randomUUID().toString()), new Name("Sanders", "Gutiérrez"), "1160219207");
+        Contact contact2 = new Contact(new ContactId(UUID.randomUUID().toString()), new Name("John", "Doe"), "1234567890");
         ContactResponse response1 = new ContactResponse(UUID.randomUUID().toString(), "Sanders", "Gutiérrez", "1160219207");
         ContactResponse response2 = new ContactResponse(UUID.randomUUID().toString(), "John", "Doe", "1234567890");
 
@@ -47,7 +48,7 @@ class RetrieveContactServiceTest {
                 .thenReturn(List.of(response1, response2));
 
         // When
-        Result<List<ContactResponse>> result = retrieveContactService.getContacts();
+        Result<List<ContactResponse>> result = retrieveContactService.retrieveAllContacts();
 
         // Then
         assertTrue(result.isSuccess());
@@ -61,14 +62,14 @@ class RetrieveContactServiceTest {
     void should_return_contact_by_id() {
         // Given
         UUID id = UUID.randomUUID();
-        Contact contact = new Contact(id, new Name("Sanders", "Gutiérrez"), "1160219207");
+        Contact contact = new Contact(new ContactId(id.toString()), new Name("Sanders", "Gutiérrez"), "1160219207");
         ContactResponse response = new ContactResponse(id.toString(), "Sanders", "Gutiérrez", "1160219207");
 
         when(contactRepository.findById(id)).thenReturn(Optional.of(contact));
         when(contactMapper.toContactResponse(contact)).thenReturn(response);
 
         // When
-        Result<ContactResponse> result = retrieveContactService.getContact(id);
+        Result<ContactResponse> result = retrieveContactService.findContactById(id);
 
         // Then
         assertTrue(result.isSuccess());
@@ -85,7 +86,7 @@ class RetrieveContactServiceTest {
         when(contactRepository.findById(id)).thenReturn(Optional.empty());
 
         // When
-        Result<ContactResponse> result = retrieveContactService.getContact(id);
+        Result<ContactResponse> result = retrieveContactService.findContactById(id);
 
         // Then
         assertFalse(result.isSuccess());

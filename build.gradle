@@ -50,7 +50,7 @@ dependencies {
     // Runtime ---------------------------------------------------------------------//
 
     //-- Data stores and supporting libs --//
-    runtimeOnly libs.h2
+    // runtimeOnly libs.h2
     //runtimeOnly libs.hsqldb
     runtimeOnly libs.postgres
 
@@ -110,4 +110,9 @@ javadoc {
 
 checkstyle {
     toolVersion = "10.12.4"
+    configFile = file("${rootDir}/config/checkstyle/google_checks.xml")
+}
+
+bootRun {
+    systemProperty 'user.timezone', 'America/Argentina/Buenos_Aires'
 }

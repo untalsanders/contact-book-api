@@ -1,9 +1,9 @@
 package com.untalsanders.contacts.shared.infrastructure.web;
 
-import com.untalsanders.contacts.contact.application.exception.ContactNotFoundException;
-import com.untalsanders.contacts.contact.application.exception.DuplicateContactException;
-import com.untalsanders.contacts.contact.application.exception.InvalidContactDataException;
-import com.untalsanders.contacts.shared.domain.ErrorMessage;
+import com.untalsanders.contacts.contact.domain.exception.ContactNotFoundException;
+import com.untalsanders.contacts.contact.domain.exception.DuplicateContactException;
+import com.untalsanders.contacts.contact.domain.exception.InvalidContactDataException;
+import com.untalsanders.contacts.shared.infrastructure.web.dto.ApiError;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -39,16 +41,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGenericException(Exception exception, WebRequest request) {
+        Map<String, String> details = new HashMap<>();
+        if (exception.getMessage() != null) {
+            details.put("error", exception.getMessage());
+        }
+        if (printStackTrace && isTraceOn(request)) {
+            details.put("stackTrace", ExceptionUtils.getStackTrace(exception));
+        }
+
         ApiError error = ApiError.builder()
             .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-            .message(ErrorMessage.UNKNOWN_ERROR.getMessage())
+            .error(ApiError.MSG_UNKNOWN_ERROR)
             .path(request.getDescription(false).replace("uri=", ""))
-            .errors(Map.of("error", exception.getMessage()))
+            .timestamp(LocalDateTime.now())
+            .details(Map.copyOf(details))
             .build();
-        if (printStackTrace && isTraceOn(request)) {
-            error.setErrors(Map.of("stackTrace", ExceptionUtils.getStackTrace(exception)));
-        }
-        log.error(ErrorMessage.UNKNOWN_ERROR.getMessage());
+
+        log.error(ApiError.MSG_UNKNOWN_ERROR);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
@@ -65,18 +74,28 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 (oldValue, newValue) -> newValue
             ));
 
-        ApiError error = ApiError.builder()
-            .status(HttpStatus.BAD_REQUEST.value())
-            .message(ErrorMessage.VALIDATION_FAILED.getMessage())
-            .path(request.getDescription(false).replace("uri=", ""))
-            .errors(validationErrors.isEmpty() ? Map.of("error", exception.getMessage()) : validationErrors)
-            .build();
-
-        if (printStackTrace && isTraceOn(request)) {
-            error.setErrors(Map.of("stackTrace", ExceptionUtils.getStackTrace(exception)));
+        Map<String, String> details = new HashMap<>();
+        if (validationErrors.isEmpty()) {
+            if (exception.getMessage() != null) {
+                details.put("error", exception.getMessage());
+            }
+        } else {
+            details.putAll(validationErrors);
         }
 
-        log.error(ErrorMessage.VALIDATION_FAILED.getMessage());
+        if (printStackTrace && isTraceOn(request)) {
+            details.put("stackTrace", ExceptionUtils.getStackTrace(exception));
+        }
+
+        ApiError error = ApiError.builder()
+            .status(HttpStatus.BAD_REQUEST.value())
+            .error(ApiError.MSG_VALIDATION_FAILED)
+            .path(request.getDescription(false).replace("uri=", ""))
+            .timestamp(LocalDateTime.now())
+            .details(Map.copyOf(details))
+            .build();
+
+        log.error(ApiError.MSG_VALIDATION_FAILED);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 

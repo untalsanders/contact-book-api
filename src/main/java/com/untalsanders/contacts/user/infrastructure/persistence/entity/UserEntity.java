@@ -46,12 +46,6 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     private Boolean enabled = true;
 
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Set.of(new SimpleGrantedAuthority("ROLE_" + role.name()));

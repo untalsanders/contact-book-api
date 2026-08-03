@@ -1,13 +1,14 @@
 package com.untalsanders.contacts.service;
 
-import com.untalsanders.contacts.contact.application.service.CreateContactService;
-import com.untalsanders.contacts.contact.infrastructure.persistence.mapper.ContactMapper;
-import com.untalsanders.contacts.contact.domain.Contact;
-import com.untalsanders.contacts.contact.domain.Name;
-import com.untalsanders.contacts.contact.application.port.out.ContactRepository;
-import com.untalsanders.contacts.contact.application.dto.ContactRequest;
-import com.untalsanders.contacts.contact.application.dto.ContactResponse;
-import com.untalsanders.contacts.shared.domain.vo.Result;
+import com.untalsanders.contacts.contact.application.CreateContactService;
+import com.untalsanders.contacts.contact.domain.model.ContactId;
+import com.untalsanders.contacts.contact.web.mapper.ContactWebMapper;
+import com.untalsanders.contacts.contact.domain.model.Contact;
+import com.untalsanders.contacts.contact.domain.model.Name;
+import com.untalsanders.contacts.contact.domain.port.out.ContactRepository;
+import com.untalsanders.contacts.contact.web.dto.ContactRequest;
+import com.untalsanders.contacts.contact.web.dto.ContactResponse;
+import com.untalsanders.contacts.shared.domain.Result;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +29,7 @@ class CreateContactServiceTest {
     private ContactRepository contactRepository;
 
     @Mock
-    private ContactMapper contactMapper;
+    private ContactWebMapper contactMapper;
 
     @InjectMocks
     private CreateContactService createContactService;
@@ -39,7 +40,7 @@ class CreateContactServiceTest {
         // Given
         Name name = new Name("Sanders", "Gutiérrez");
         ContactRequest contactRequest = new ContactRequest(UUID.randomUUID().toString(), "Sanders", "Gutiérrez", "1160219207");
-        Contact contact = new Contact(UUID.randomUUID(), name, "1160219207");
+        Contact contact = new Contact(new ContactId(UUID.randomUUID().toString()), name, "1160219207");
         ContactResponse contactResponse = new ContactResponse(null, "Sanders", "Gutiérrez", "1160219207");
 
         // When

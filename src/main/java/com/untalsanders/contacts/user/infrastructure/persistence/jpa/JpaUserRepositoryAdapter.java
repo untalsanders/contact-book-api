@@ -4,9 +4,10 @@ import com.untalsanders.contacts.user.domain.exception.UserNotFoundException;
 import com.untalsanders.contacts.user.domain.model.User;
 import com.untalsanders.contacts.user.domain.port.out.UserRepository;
 import com.untalsanders.contacts.user.infrastructure.persistence.entity.UserEntity;
-import com.untalsanders.contacts.user.infrastructure.persistence.mapper.UserMapper;
+import com.untalsanders.contacts.user.infrastructure.persistence.mapper.UserPersistenceMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -18,10 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 public class JpaUserRepositoryAdapter implements UserRepository {
 
     private final EntityManager entityManager;
-    private final UserMapper userMapper;
+    private final UserPersistenceMapper userMapper;
 
     @Override
     public Optional<User> findById(String id) {
@@ -62,12 +63,13 @@ public class JpaUserRepositoryAdapter implements UserRepository {
         return findByUsername(username).isPresent();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Set<User> findAll() {
-        TypedQuery<UserEntity> query = entityManager.createQuery("SELECT u FROM UserEntity u", UserEntity.class);
-        return query.getResultStream()
-                .map(userMapper::toDomain)
-                .collect(Collectors.toSet());
+    public List<User> findAll() {
+        Query query = entityManager.createQuery("SELECT user FROM UserEntity user");
+        Collection<UserEntity> userEntitiesCollection = query.getResultList();
+        log.info("Total users found: {}", userEntitiesCollection.size());
+        return userMapper.toUsers(userEntitiesCollection.stream().toList());
     }
 
     @Override
@@ -80,8 +82,7 @@ public class JpaUserRepositoryAdapter implements UserRepository {
         return userMapper.toDomain(entity);
     }
 
-    @Override
-    @Transactional
+    @Override @Transactional
     public User update(String id, User user) {
         UserEntity existing = entityManager.find(UserEntity.class, UUID.fromString(id));
         if (existing == null) {
@@ -112,7 +113,7 @@ public class JpaUserRepositoryAdapter implements UserRepository {
     @Transactional
     public boolean deleteByEmail(String email) {
         return findByEmail(email).map(user -> {
-            deleteById(user.id().value().toString());
+            deleteById(user.getId().value().toString());
             return true;
         }).orElse(false);
     }
@@ -121,7 +122,7 @@ public class JpaUserRepositoryAdapter implements UserRepository {
     @Transactional
     public boolean deleteByUsername(String username) {
         return findByUsername(username).map(user -> {
-            deleteById(user.id().value().toString());
+            deleteById(user.getId().value().toString());
             return true;
         }).orElse(false);
     }

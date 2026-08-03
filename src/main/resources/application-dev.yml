@@ -1,25 +1,22 @@
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:./data/h2/contact-book-api;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1
-    username: sa
-    password:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/${DB_NAME:contactmanager}
+    username: postgres
+    password: 12345
   sql:
     init:
       # SQL is written to be idempotent so this is safe
       mode: always
-      schema-locations: classpath*:db/h2/schema.sql
-      data-locations: classpath*:db/h2/data.sql
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+      schema-locations: classpath*:db/postgres/schema.sql
+      data-locations: classpath*:db/postgres/data.sql
   jpa:
     show-sql: false
     defer-datasource-initialization: true
     open-in-view: false
     hibernate:
       ddl-auto: create-drop
+      dialect: org.hibernate.dialect.PostgreSQLDialect
 
 management:
   info:
