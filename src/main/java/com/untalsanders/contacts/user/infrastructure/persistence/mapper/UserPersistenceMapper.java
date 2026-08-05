@@ -6,6 +6,9 @@ import com.untalsanders.contacts.user.infrastructure.persistence.entity.UserEnti
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,10 +33,18 @@ public interface UserPersistenceMapper {
                 entity.getFirstname(),
                 entity.getLastname(),
                 entity.getRole(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt()
+                map(entity.getCreatedAt()),
+                map(entity.getUpdatedAt())
         );
     }
 
     List<User> toUsers(List<UserEntity> entities);
+
+    default LocalDateTime map(Instant value) {
+        return value != null ? LocalDateTime.ofInstant(value, ZoneOffset.UTC) : null;
+    }
+
+    default Instant map(LocalDateTime value) {
+        return value != null ? value.toInstant(ZoneOffset.UTC) : null;
+    }
 }
